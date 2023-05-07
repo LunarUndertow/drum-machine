@@ -1,1 +1,1 @@
-Simple drum machine with React and Redux
+A simple drum machine with React and Redux
