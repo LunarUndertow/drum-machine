@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+
+.trackContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  margin: 0.2em;
+}
+
+.trackName {
+  width: 5em;
+  margin: auto;
+  margin-left: 1em;
+  font-size: medium;
+  text-align: left;
+}
+
+.tempo {
+  font-size: medium;
+  display: flex;
+  margin: 0.5em;
+}
+
+.tempoLabel {
+  margin: auto;
+  margin-left: 1em;
+}

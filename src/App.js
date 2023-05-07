@@ -26,8 +26,7 @@ function App() {
         <div className="App">
             <header className="App-header">
                 <button onClick={play} id="playButton">Play</button>
-                <Box sx={{width: 300}}>
-                    {'tempo'}
+                <Box sx={{width: 300}} className="tempo">
                     <Slider 
                         aria-label="tempo" 
                         defaultValue={120}
@@ -36,6 +35,9 @@ function App() {
                         valueLabelDisplay='auto'
                         onChange={changeTempo}
                     />
+                    <span className="tempoLabel">
+                        {'tempo'}
+                    </span>
                 </Box>
                 <SampleSequencer audioCtx={audioCtx} track={0} src={'./kick.mp3'} name={"kick"} />
                 <SampleSequencer audioCtx={audioCtx} track={1} src={'./snare.mp3'} name={"snare"} />
