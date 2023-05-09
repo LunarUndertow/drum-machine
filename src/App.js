@@ -7,13 +7,13 @@ import { useDispatch } from 'react-redux';
 import { setTempo } from './features/steps/stepsSlice';
 
 function App() {
-    let isPlaying = false;
+    const isPlaying = useRef(false);
     const audioCtx = useRef(new AudioContext());
     const dispatch = useDispatch();
 
     const play = () => {
-        isPlaying = !isPlaying;
-        if (isPlaying) audioCtx.current.resume();
+        isPlaying.current = !isPlaying.current;
+        if (isPlaying.current) audioCtx.current.resume();
         else audioCtx.current.suspend();
     }
 
