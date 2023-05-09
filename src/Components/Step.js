@@ -13,6 +13,7 @@ function Step(props) {
         dispatch(setStep({track, id}));
     }
 
+    
     return (
             <ToggleButton 
                 value="step"
