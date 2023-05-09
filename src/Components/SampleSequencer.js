@@ -92,14 +92,14 @@ function SampleSequencer(props) {
   
   
     return (
-        <div class="trackContainer">
+        <div className="trackContainer">
             {steps.map((step, index) => (
                 <Step key={index} id={index} track={track} />
             ))}
             <button onClick={play} id="playBtn">
                 Play
             </button>
-            <span class="trackName">
+            <span className="trackName">
                 {props.name}
             </span>
         </div>
