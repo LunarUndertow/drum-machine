@@ -24,7 +24,6 @@ export const stepsSlice = createSlice({
     }
 });
 
-export const { setStep } = stepsSlice.actions;
-export const { setTempo } = stepsSlice.actions;
+export const { setStep, setTempo } = stepsSlice.actions;
 
 export default stepsSlice.reducer;
