@@ -1,19 +1,20 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import './App.css';
 import SampleSequencer from './Components/SampleSequencer';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import { useDispatch } from 'react-redux';
-import { setTempo } from './features/steps/stepsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTempo, toggleIsPlaying } from './features/steps/stepsSlice';
 
 function App() {
-    const isPlaying = useRef(false);
+    const isPlaying = useSelector((state) => state.steps.isPlaying);
+    const isPlayingRef = useRef(isPlaying);
     const audioCtx = useRef(new AudioContext());
     const dispatch = useDispatch();
 
     const play = () => {
-        isPlaying.current = !isPlaying.current;
-        if (isPlaying.current) audioCtx.current.resume();
+        dispatch(toggleIsPlaying());
+        if (isPlayingRef) audioCtx.current.resume();
         else audioCtx.current.suspend();
     }
 
@@ -21,6 +22,11 @@ function App() {
     const changeTempo = (event, newValue) => {
         dispatch(setTempo(newValue));
     }
+
+
+    useEffect(() => {
+        isPlayingRef.current = isPlaying;
+    }, [isPlaying])
 
 
     return (

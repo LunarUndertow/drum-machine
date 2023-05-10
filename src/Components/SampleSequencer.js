@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { togglePlaying } from '../features/steps/stepsSlice';
 import Step from './Step';
 
 function SampleSequencer(props) {
@@ -20,7 +21,12 @@ function SampleSequencer(props) {
     let nextNoteTime = audioCtx.currentTime;
     const lookahead = 25.0;
     const scheduleAheadTime = 0.1;
-    const playing = useRef(false);
+    const playing = useSelector((state) => state.steps.playing[track]);
+    const playingRef = useRef(playing);
+    const isPlaying = useSelector((state) => state.steps.isPlaying);
+    const isPlayingRef = useRef(isPlaying);
+
+    const dispatch = useDispatch();
     // let timerID;
   
     const playSample = async (time) => {
@@ -48,7 +54,8 @@ function SampleSequencer(props) {
 
 
     const scheduler = () => {
-        if (playing.current) {
+        if (!isPlayingRef.current) return;
+        if (playingRef.current) {
             while (nextNoteTime < audioCtx.currentTime + scheduleAheadTime) {
                 scheduleNote(currentNote, nextNoteTime);
                 nextNote();
@@ -58,13 +65,6 @@ function SampleSequencer(props) {
         }
     }
 
-
-    const play = () => {
-        playing.current = !playing.current;
-        if (playing.current)
-            scheduler();
-    }
-  
   
     async function getSample() {
         const response = await fetch(sampleSrc);
@@ -81,8 +81,20 @@ function SampleSequencer(props) {
     
     useEffect(() => {
         tempoRef.current = tempo;
-    }, [tempo]);    
+    }, [tempo]);
+
+
+    useEffect(() => {
+        playingRef.current = playing;
+        scheduler();
+    }, [playing]);
   
+
+    useEffect(() => {
+        isPlayingRef.current = isPlaying;
+        scheduler();
+    }, [isPlaying]);
+
 
     useEffect(() => {
         getSample().then((buffer) => {
@@ -96,7 +108,7 @@ function SampleSequencer(props) {
             {steps.map((step, index) => (
                 <Step key={index} id={index} track={track} />
             ))}
-            <button onClick={play} id="playBtn">
+            <button onClick={() => {dispatch(togglePlaying({track}))}} id="playBtn">
                 Play
             </button>
             <span className="trackName">
