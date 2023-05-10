@@ -1,10 +1,13 @@
 import { useEffect, useRef } from 'react';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import './App.css';
 import SampleSequencer from './Components/SampleSequencer';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTempo, toggleIsPlaying } from './features/steps/stepsSlice';
+import { ToggleButton } from '@mui/material';
 
 function App() {
     const isPlaying = useSelector((state) => state.steps.isPlaying);
@@ -32,7 +35,9 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <button onClick={play} id="playButton">Play</button>
+                <ToggleButton onChange={play} value={isPlayingRef}>
+                    {isPlaying ? <PlayArrowIcon /> : <PlayArrowOutlinedIcon />}
+                </ToggleButton>
                 <Box sx={{width: 300}} className="tempo">
                     <Slider 
                         aria-label="tempo" 

@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useSelector, useDispatch } from 'react-redux';
 import { togglePlaying } from '../features/steps/stepsSlice';
 import Step from './Step';
+import { ToggleButton } from '@mui/material';
 
 function SampleSequencer(props) {
     const track = props.track;
@@ -107,9 +110,9 @@ function SampleSequencer(props) {
             {steps.map((step, index) => (
                 <Step key={index} id={index} track={track} />
             ))}
-            <button onClick={() => {dispatch(togglePlaying({track}))}} id="playBtn">
-                Play
-            </button>
+            <ToggleButton sx={{ml:2}} onChange={() => dispatch(togglePlaying({track}))} value={playingRef}>
+                {playing ? <PlayArrowIcon /> : <PlayArrowOutlinedIcon />}
+            </ToggleButton>
             <span className="trackName">
                 {props.name}
             </span>
