@@ -55,14 +55,13 @@ function SampleSequencer(props) {
 
     const scheduler = () => {
         if (!isPlayingRef.current) return;
-        if (playingRef.current) {
-            while (nextNoteTime < audioCtx.currentTime + scheduleAheadTime) {
-                scheduleNote(currentNote, nextNoteTime);
-                nextNote();
-            }
-            // timerID = setTimeout(scheduler, lookahead);
-            setTimeout(scheduler, lookahead);
+        if (!playingRef.current) return;
+        while (nextNoteTime < audioCtx.currentTime + scheduleAheadTime) {
+            scheduleNote(currentNote, nextNoteTime);
+            nextNote();
         }
+        // timerID = setTimeout(scheduler, lookahead);
+        setTimeout(scheduler, lookahead);
     }
 
   
