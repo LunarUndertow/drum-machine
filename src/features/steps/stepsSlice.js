@@ -8,7 +8,8 @@ const initialState = {
                  [false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false]
                 ],
     playing: [false, false, false, false],
-    isPlaying: false
+    isPlaying: false,
+    currentNote: 0,
 };
 
 export const stepsSlice = createSlice({
@@ -31,10 +32,14 @@ export const stepsSlice = createSlice({
 
         toggleIsPlaying: (state) => {
             state.isPlaying = !state.isPlaying;
+        },
+
+        advance: (state) => {
+            state.currentNote = (state.currentNote + 1) % 16;
         }
     }
 });
 
-export const { setStep, setTempo, togglePlaying, toggleIsPlaying } = stepsSlice.actions;
+export const { setStep, setTempo, togglePlaying, toggleIsPlaying, advance } = stepsSlice.actions;
 
 export default stepsSlice.reducer;

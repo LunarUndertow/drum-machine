@@ -12,93 +12,61 @@ function SampleSequencer(props) {
     const steps = useSelector((state) => state.steps.stepValues[track]);
     const stepsRef = useRef(steps);
     const sampleSrc = props.src;
-    
-    let tempo = useSelector((state) => state.steps.tempo);
-    const tempoRef = useRef(tempo);
     const audioCtx = props.audioCtx;
-
     const [sample, setSample] = useState(null);
     const playbackRate = 1;
-    
-    let currentNote = 0;
-    let nextNoteTime = audioCtx.currentTime;
-    const lookahead = 25.0;
-    const scheduleAheadTime = 0.1;
+    const nextNoteTime = useSelector((state) => state.steps.nextNoteTime);
+    const nextNoteTimeRef = useRef(nextNoteTime);
     const playing = useSelector((state) => state.steps.playing[track]);
     const playingRef = useRef(playing);
-    const isPlaying = useSelector((state) => state.steps.isPlaying);
-    const isPlayingRef = useRef(isPlaying);
-
+    const currentNote = useSelector((state) => state.steps.currentNote);
     const dispatch = useDispatch();
     // let timerID;
   
-    const playSample = async (time) => {
-        if (sample) {
-            const sampleSource = audioCtx.createBufferSource();
-            sampleSource.buffer = sample;
-            sampleSource.playbackRate.value = playbackRate;
-            sampleSource.connect(audioCtx.destination);
-            sampleSource.start(time);
-            return sampleSource;
-        }
-    };
+    useEffect(() => {
+        const playSample = async (time) => {
+            if (sample) {
+                const sampleSource = audioCtx.createBufferSource();
+                sampleSource.buffer = sample;
+                sampleSource.playbackRate.value = playbackRate;
+                sampleSource.connect(audioCtx.destination);
+                sampleSource.start(time);
+                return sampleSource;
+            }
+        };
 
+        const scheduleNote = (beatNumber, time) => {
+            if (stepsRef.current[beatNumber]) playSample(time);
+        };
 
-    const nextNote = () => {
-        const secondsPerSixteenth = 60.0 / tempoRef.current / 4;
-        nextNoteTime += secondsPerSixteenth;
-        currentNote = (currentNote + 1) % 16;
-    }
-  
-  
-    const scheduleNote = (beatNumber, time) => {
-        if (stepsRef.current[beatNumber]) playSample(time);
-    }
-
-
-    const scheduler = () => {
-        if (!isPlayingRef.current) return;
-        if (!playingRef.current) return;
-        while (nextNoteTime < audioCtx.currentTime + scheduleAheadTime) {
-            scheduleNote(currentNote, nextNoteTime);
-            nextNote();
-        }
-        // timerID = setTimeout(scheduler, lookahead);
-        setTimeout(scheduler, lookahead);
-    }
-
-  
-    async function getSample() {
-        const response = await fetch(sampleSrc);
-        const arrayBuffer = await response.arrayBuffer();
-        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-        return audioBuffer;
-    };
+        if (playingRef.current)
+            scheduleNote(currentNote, nextNoteTimeRef.current);
+    }, [currentNote]);
 
     
     useEffect(() => {
         stepsRef.current = steps;
     }, [steps]);
-  
-    
-    useEffect(() => {
-        tempoRef.current = tempo;
-    }, [tempo]);
 
 
     useEffect(() => {
         playingRef.current = playing;
-        scheduler();
     }, [playing]);
   
 
     useEffect(() => {
-        isPlayingRef.current = isPlaying;
-        scheduler();
-    }, [isPlaying]);
-
+        nextNoteTimeRef.current = nextNoteTime;
+    }, [nextNoteTime]);
+  
 
     useEffect(() => {
+        async function getSample() {
+            const response = await fetch(sampleSrc);
+            const arrayBuffer = await response.arrayBuffer();
+            const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+            return audioBuffer;
+        };
+
         getSample().then((buffer) => {
             setSample(buffer);
         });

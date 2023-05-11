@@ -6,7 +6,7 @@ import SampleSequencer from './Components/SampleSequencer';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTempo, toggleIsPlaying } from './features/steps/stepsSlice';
+import { setTempo, toggleIsPlaying, advance } from './features/steps/stepsSlice';
 import { ToggleButton } from '@mui/material';
 
 function App() {
@@ -15,21 +15,50 @@ function App() {
     const audioCtx = useRef(new AudioContext());
     const dispatch = useDispatch();
 
+    const tempo = useSelector((state) => state.steps.tempo);
+    const tempoRef = useRef(tempo);
+    const nextNoteTime = useRef(audioCtx.current.currentTime)
+    const scheduleAheadTime = 0.1;
+    const lookahead = 25.0;
+
     const play = () => {
         dispatch(toggleIsPlaying());
-        if (isPlayingRef) audioCtx.current.resume();
-        else audioCtx.current.suspend();
-    }
+    };
+
+
+    useEffect(() => {
+        const scheduler = () => {
+            if (!isPlaying) return;
+            while (nextNoteTime.current < audioCtx.current.currentTime + scheduleAheadTime) {
+                nextNote();
+            }
+            setTimeout(scheduler, lookahead);
+        };
+        
+        const nextNote = () => {
+            const secondsPerSixteenth = 60.0 / tempoRef.current / 4;
+            nextNoteTime.current += secondsPerSixteenth;
+            dispatch(advance());
+        };
+
+        if (isPlaying) {
+            audioCtx.current.resume();
+            scheduler();
+        } else {
+            audioCtx.current.suspend();
+        }
+        isPlayingRef.current = isPlaying;
+    }, [isPlaying]);
 
 
     const changeTempo = (event, newValue) => {
         dispatch(setTempo(newValue));
-    }
+    };
 
 
     useEffect(() => {
-        isPlayingRef.current = isPlaying;
-    }, [isPlaying])
+        tempoRef.current = tempo;
+    }, [tempo]);
 
 
     return (
@@ -48,7 +77,7 @@ function App() {
                         onChange={changeTempo}
                     />
                     <span className="tempoLabel">
-                        {'tempo'}
+                        {"tempo"}
                     </span>
                 </Box>
                 <SampleSequencer audioCtx={audioCtx.current} track={0} src={'./kick.mp3'} name={"kick"} />
