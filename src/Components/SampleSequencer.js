@@ -8,21 +8,29 @@ import { ToggleButton } from '@mui/material';
 
 function SampleSequencer(props) {
     const track = props.track;
-    // store steps in a useRef object that doesn't reset on re-renders
-    const steps = useSelector(state => state.steps.stepValues[track]);
-    const stepsRef = useRef(steps);
     const sampleSrc = props.src;
     const audioCtx = props.audioCtx;
-    const [sample, setSample] = useState(null);
-    const playbackRate = 1;
+    
+    // store value in useRef hooks so that they can be updated
+    // immediately to prevent unpredictable behaviour resulting
+    // from async updates
+    const steps = useSelector(state => state.steps.stepValues[track]);
+    const stepsRef = useRef(steps);
     const nextNoteTime = useSelector(state => state.steps.nextNoteTime);
     const nextNoteTimeRef = useRef(nextNoteTime);
     const playing = useSelector(state => state.steps.playing[track]);
     const playingRef = useRef(playing);
+    
+    // use local state instead of store for
+    // the sample as it's not needed elsewhere
+    const [sample, setSample] = useState(null);
+    const playbackRate = 1;
     const currentNote = useSelector(state => state.steps.currentNote);
     const dispatch = useDispatch();
     // let timerID;
-  
+
+    // when the player advances to the next note, schedule
+    // note and play sample if the step is toggled on
     useEffect(() => {
         const playSample = async (time) => {
             if (sample) {
@@ -44,6 +52,9 @@ function SampleSequencer(props) {
     }, [currentNote]);
 
     
+    // useEffect hooks to update references to state in order
+    // to be always up to date and prevent unpredictabilities
+    // that might result from async updates
     useEffect(() => {
         stepsRef.current = steps;
     }, [steps]);
@@ -59,6 +70,7 @@ function SampleSequencer(props) {
     }, [nextNoteTime]);
   
 
+    // load the sample given as prop when the componen is created
     useEffect(() => {
         async function getSample() {
             const response = await fetch(sampleSrc);
@@ -73,6 +85,9 @@ function SampleSequencer(props) {
     }, []);
   
 
+    // re-render step components only when steps array changes
+    // to prevent re-renders when playback advances to next note
+    // in order to improve performance
     const stepsRendered = useMemo(
         () => (steps.map((step, index) => (
             <Step key={index} id={index} track={track} />
@@ -81,6 +96,8 @@ function SampleSequencer(props) {
     );
 
   
+    // step components, a button to toggle the playing status of the individual
+    // track withan icon that changes along with the status, and track name
     return (
         <div className="trackContainer">
             { stepsRendered }
