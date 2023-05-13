@@ -30,11 +30,11 @@ export const stepsSlice = createSlice({
             state.playing[track] = !state.playing[track];
         },
 
-        toggleIsPlaying: (state) => {
+        toggleIsPlaying: state => {
             state.isPlaying = !state.isPlaying;
         },
 
-        advance: (state) => {
+        advance: state => {
             state.currentNote = (state.currentNote + 1) % 16;
         }
     }

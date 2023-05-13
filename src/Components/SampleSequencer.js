@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,17 +9,17 @@ import { ToggleButton } from '@mui/material';
 function SampleSequencer(props) {
     const track = props.track;
     // store steps in a useRef object that doesn't reset on re-renders
-    const steps = useSelector((state) => state.steps.stepValues[track]);
+    const steps = useSelector(state => state.steps.stepValues[track]);
     const stepsRef = useRef(steps);
     const sampleSrc = props.src;
     const audioCtx = props.audioCtx;
     const [sample, setSample] = useState(null);
     const playbackRate = 1;
-    const nextNoteTime = useSelector((state) => state.steps.nextNoteTime);
+    const nextNoteTime = useSelector(state => state.steps.nextNoteTime);
     const nextNoteTimeRef = useRef(nextNoteTime);
-    const playing = useSelector((state) => state.steps.playing[track]);
+    const playing = useSelector(state => state.steps.playing[track]);
     const playingRef = useRef(playing);
-    const currentNote = useSelector((state) => state.steps.currentNote);
+    const currentNote = useSelector(state => state.steps.currentNote);
     const dispatch = useDispatch();
     // let timerID;
   

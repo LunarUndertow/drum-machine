@@ -10,12 +10,12 @@ import { setTempo, toggleIsPlaying, advance } from './features/steps/stepsSlice'
 import { ToggleButton } from '@mui/material';
 
 function App() {
-    const isPlaying = useSelector((state) => state.steps.isPlaying);
+    const isPlaying = useSelector(state => state.steps.isPlaying);
     const isPlayingRef = useRef(isPlaying);
     const audioCtx = useRef(new AudioContext());
     const dispatch = useDispatch();
 
-    const tempo = useSelector((state) => state.steps.tempo);
+    const tempo = useSelector(state => state.steps.tempo);
     const tempoRef = useRef(tempo);
     const nextNoteTime = useRef(audioCtx.current.currentTime)
     const scheduleAheadTime = 0.1;
