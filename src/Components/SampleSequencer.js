@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useSelector, useDispatch } from 'react-redux';
@@ -72,12 +72,18 @@ function SampleSequencer(props) {
         });
     }, []);
   
+
+    const stepsRendered = useMemo(
+        () => (steps.map((step, index) => (
+            <Step key={index} id={index} track={track} />
+            ))
+        ), steps
+    );
+
   
     return (
         <div className="trackContainer">
-            {steps.map((step, index) => (
-                <Step key={index} id={index} track={track} />
-            ))}
+            { stepsRendered }
             <ToggleButton sx={{ml:2}} onChange={() => dispatch(togglePlaying({track}))} value={playingRef}>
                 {playing ? <PlayArrowIcon /> : <PlayArrowOutlinedIcon />}
             </ToggleButton>
