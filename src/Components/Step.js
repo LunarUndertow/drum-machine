@@ -19,7 +19,6 @@ function Step(props) {
                 onChange={handleToggle}
                 size="medium"
                 selected={active}
-                color="success"
                 className="ToggleButton"
             >
                 {id+1}
