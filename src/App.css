@@ -39,9 +39,10 @@
 
 .trackContainer {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   align-items: left;
-  margin: 0.2em;
+  margin: 0.4em;
 }
 
 .trackName {
