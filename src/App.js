@@ -10,6 +10,7 @@ import { setTempo, toggleIsPlaying, advance } from './features/steps/stepsSlice'
 import { ToggleButton } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { Ch, Kick, Oh, Snare } from './audio';
 
 function App() {
     // make useRef hooks for store values in order to prevent
@@ -119,10 +120,10 @@ function App() {
                             {"tempo"}
                         </span>
                     </Box>
-                    <SampleSequencer audioCtx={audioCtx.current} track={0} src={'./kick.mp3'} name={"kick"} />
-                    <SampleSequencer audioCtx={audioCtx.current} track={1} src={'./snare.mp3'} name={"snare"} />
-                    <SampleSequencer audioCtx={audioCtx.current} track={2} src={'./ch.mp3'} name={"closed hat"} />
-                    <SampleSequencer audioCtx={audioCtx.current} track={3} src={'./oh.mp3'} name={"open hat"} />
+                    <SampleSequencer audioCtx={audioCtx.current} track={0} src={Kick} name={"kick"} />
+                    <SampleSequencer audioCtx={audioCtx.current} track={1} src={Snare} name={"snare"} />
+                    <SampleSequencer audioCtx={audioCtx.current} track={2} src={Ch} name={"closed hat"} />
+                    <SampleSequencer audioCtx={audioCtx.current} track={3} src={Oh} name={"open hat"} />
                 </header>
             </div>
         </ThemeProvider>

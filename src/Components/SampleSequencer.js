@@ -70,7 +70,7 @@ function SampleSequencer(props) {
     }, [nextNoteTime]);
   
 
-    // load the sample given as prop when the componen is created
+    // load the sample given as prop when the component is created
     useEffect(() => {
         async function getSample() {
             const response = await fetch(sampleSrc);
