@@ -103,28 +103,26 @@ function App() {
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
             <div className="App">
-                <header className="App-header">
-                    <ToggleButton onChange={play} value={isPlayingRef}>
-                        {isPlaying ? <PlayArrowIcon /> : <PlayArrowOutlinedIcon />}
-                    </ToggleButton>
-                    <Box sx={{width: 300}} className="tempo">
-                        <Slider 
-                            aria-label="tempo" 
-                            defaultValue={tempoRef.current}
-                            min={40}
-                            max={260}
-                            valueLabelDisplay='auto'
-                            onChange={changeTempo}
-                        />
-                        <span className="tempoLabel">
-                            {"tempo"}
-                        </span>
-                    </Box>
-                    <SampleSequencer audioCtx={audioCtx.current} track={0} src={Kick} name={"kick"} />
-                    <SampleSequencer audioCtx={audioCtx.current} track={1} src={Snare} name={"snare"} />
-                    <SampleSequencer audioCtx={audioCtx.current} track={2} src={Ch} name={"closed hat"} />
-                    <SampleSequencer audioCtx={audioCtx.current} track={3} src={Oh} name={"open hat"} />
-                </header>
+                <ToggleButton onChange={play} value={isPlayingRef}>
+                    {isPlaying ? <PlayArrowIcon /> : <PlayArrowOutlinedIcon />}
+                </ToggleButton>
+                <Box sx={{width: 300}} className="tempo">
+                    <Slider 
+                        aria-label="tempo" 
+                        defaultValue={tempoRef.current}
+                        min={40}
+                        max={260}
+                        valueLabelDisplay='auto'
+                        onChange={changeTempo}
+                    />
+                    <span className="tempoLabel">
+                        {"tempo"}
+                    </span>
+                </Box>
+                <SampleSequencer audioCtx={audioCtx.current} track={0} src={Kick} name={"kick"} />
+                <SampleSequencer audioCtx={audioCtx.current} track={1} src={Snare} name={"snare"} />
+                <SampleSequencer audioCtx={audioCtx.current} track={2} src={Ch} name={"closed hat"} />
+                <SampleSequencer audioCtx={audioCtx.current} track={3} src={Oh} name={"open hat"} />
             </div>
         </ThemeProvider>
     );
